@@ -1,0 +1,102 @@
+# ================================================================
+# HA TANG CHO DU AN ME & BE SHOP
+# Chay: docker compose up -d
+# Tat:  docker compose down        (them -v de xoa luon du lieu)
+#
+# Ban co the bat/tat tung dich vu tuy nhu cau (dung "profiles").
+#  - Mac dinh chay: MySQL + Adminer (du de code backend co ban)
+#  - Khi can Redis:  docker compose --profile cache up -d
+#  - Khi can Kafka:  docker compose --profile stream up -d
+#  - Bat tat ca:     docker compose --profile cache --profile stream up -d
+# ================================================================
+
+services:
+  # ---------- CO SO DU LIEU ----------
+  mysql:
+    image: mysql:8.0
+    container_name: mevabe-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: mevabe_shop
+      MYSQL_USER: mevabe
+      MYSQL_PASSWORD: mevabe123
+    ports:
+      # Dung 3307 o may that de tranh dung MySQL local (thuong chiem 3306)
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # LUU Y: Schema gio do FLYWAY quan ly (backend tu chay migration khi khoi dong).
+      # Vi vay KHONG con auto-import SQL o day nua. MySQL khoi dong rong, Flyway tao bang.
+    # log-bin-trust-function-creators=1: cho phep tao TRIGGER/FUNCTION khi user khong co SUPER
+    # (can cho Flyway chay migration co trigger).
+    command: >-
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --log-bin-trust-function-creators=1
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ---------- UI QUAN LY DB (nhe, tien) ----------
+  adminer:
+    image: adminer:latest
+    container_name: mevabe-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+
+  # ---------- CACHE: REDIS (profile: cache) ----------
+  redis:
+    image: redis:7-alpine
+    container_name: mevabe-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    profiles: ["cache"]
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  # ---------- MESSAGE BROKER: KAFKA (KRaft, khong can Zookeeper) (profile: stream) ----------
+  kafka:
+    image: bitnami/kafka:3.7
+    container_name: mevabe-kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+    profiles: ["stream"]
+    environment:
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_PROCESS_ROLES: "broker,controller"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    volumes:
+      - kafka_data:/bitnami/kafka
+
+  # ---------- UI XEM KAFKA (profile: stream) ----------
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: mevabe-kafka-ui
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    profiles: ["stream"]
+    environment:
+      KAFKA_CLUSTERS_0_NAME: mevabe
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    depends_on:
+      - kafka
+
+volumes:
+  mysql_data:
+  redis_data:
+  kafka_data:
