@@ -1,0 +1,40 @@
+name: Bug
+description: Báo lỗi hành vi sai so với kỳ vọng.
+title: "[fix] "
+labels: ["type:bug"]
+body:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Nghiệp vụ
+      options:
+        - catalog
+        - identity
+        - commerce
+        - content
+        - platform
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Hiện tượng
+      description: Đang xảy ra gì. Kèm bước tái hiện nếu có.
+      placeholder: |
+        1. Mở /categories
+        2. ...
+        Kỳ vọng: ...
+        Thực tế: ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Tiêu chí chấp nhận
+      description: Given / When / Then sau khi sửa.
+      placeholder: |
+        Given danh mục đang inactive
+        When gọi API public
+        Then danh mục đó không xuất hiện
+    validations:
+      required: true

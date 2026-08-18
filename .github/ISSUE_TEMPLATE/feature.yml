@@ -1,0 +1,47 @@
+name: Tính năng
+description: Đề xuất hoặc lên kế hoạch một thay đổi hành vi (API, UI, nghiệp vụ).
+title: "[feat] "
+labels: ["type:feature"]
+body:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Nghiệp vụ
+      description: Chọn một miền. Tách issue nếu đụng hai miền.
+      options:
+        - catalog
+        - identity
+        - commerce
+        - content
+        - platform
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Mục tiêu
+      description: Người dùng hoặc admin làm được gì sau khi xong.
+      placeholder: Admin lọc được sản phẩm theo danh mục trên trang quản trị.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Phạm vi
+      description: Làm gì / không làm gì trong ticket này.
+      placeholder: |
+        Làm: API GET /v1/products?categoryCode=
+        Không làm: UI admin, Elasticsearch.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Tiêu chí chấp nhận
+      description: Given / When / Then. Càng cụ thể càng dễ review.
+      placeholder: |
+        Given đã có sản phẩm thuộc danh mục CAT-001
+        When gọi GET /api/v1/products?categoryCode=CAT-001
+        Then chỉ trả sản phẩm thuộc danh mục đó
+    validations:
+      required: true

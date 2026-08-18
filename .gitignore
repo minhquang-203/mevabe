@@ -1,0 +1,35 @@
+# --- Java / Maven ---
+mevabe/target/
+*.class
+*.jar
+*.war
+hs_err_pid*
+
+# --- Node / Next.js ---
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+frontend/*.tsbuildinfo
+
+# --- Secrets ---
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# --- IDE / OS ---
+.idea/
+**/.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# --- Python cache (scripts trong docs/) ---
+docs/__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# --- Unrelated / bulky local files ---
+Computer_Networking_A_Top-Down_Approach_Ross.pdf

@@ -12,6 +12,25 @@ Dự án website bán hàng Mẹ & Bé (e-commerce + blog). Repo gồm 2 phần:
 
 Kiến trúc backend được thiết kế theo kiểu **Ports & Adapters** để về sau **cắm thêm Redis / Hàng đợi / Kafka mà không phải sửa code nghiệp vụ**.
 
+Cách team làm việc (ticket → nhánh → PR → CI): xem [docs/CACH_LAM_VIEC.md](docs/CACH_LAM_VIEC.md). Biến môi trường mẫu: [`.env.example`](.env.example) (copy thành `.env`, không commit file `.env`).
+
+---
+
+## 0. Luồng chuẩn trước khi code
+
+1. **Tạo issue** trên GitHub (template *Tính năng* hoặc *Bug*) — đây là ticket.
+2. **Tạo nhánh** từ `main`, đặt tên theo issue:
+
+```bash
+git checkout main
+git pull
+git checkout -b feat/MEV-12-mo-ta-ngan
+```
+
+3. **Mở pull request** vào `main` (điền template, đợi CI xanh, rồi mới merge). Không push thẳng lên `main`.
+
+CI chạy Maven test (backend) và `npm run lint` (frontend) trên mỗi PR.
+
 ---
 
 ## 1. Yêu cầu máy (bạn đã có sẵn)
