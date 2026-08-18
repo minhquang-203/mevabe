@@ -6,8 +6,7 @@ Dự án website bán hàng Mẹ & Bé (e-commerce + blog). Repo gồm 2 phần:
 |---------|-----------|---------|
 | `mevabe/` | Spring Boot 3.3 (Java 21) | Backend REST API |
 | `frontend/` | Next.js 15 (React + TypeScript) | Giao diện người dùng |
-| `mevabe_shop_v2.sql` | MySQL 8 | Lược đồ CSDL gốc (nguồn để tạo migration Flyway) |
-| `mevabe/src/main/resources/db/migration/` | Flyway | Migration CSDL có đánh version (`V1__init_schema.sql`) |
+| `mevabe/src/main/resources/db/migration/` | Flyway | Schema CSDL có đánh version (`V1__init_schema.sql`) |
 | `docker-compose.yml` | Docker | Hạ tầng: MySQL, Redis, Kafka, các UI |
 
 Kiến trúc backend được thiết kế theo kiểu **Ports & Adapters** để về sau **cắm thêm Redis / Hàng đợi / Kafka mà không phải sửa code nghiệp vụ**.
