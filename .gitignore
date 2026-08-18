@@ -33,3 +33,10 @@ docs/__pycache__/
 
 # --- Unrelated / bulky local files ---
 Computer_Networking_A_Top-Down_Approach_Ross.pdf
+
+# --- Đặc tả / generator local (không đưa lên GitHub) ---
+BabyShop_Function_Specification.xlsx
+docs/Dac-ta-tinh-nang-Mevabe-Shop.xlsx
+docs/generate_feature_spec.py
+docs/spec_enrich.py
+Danh_gia_2_file_dac_ta_chuc_nang.txt
